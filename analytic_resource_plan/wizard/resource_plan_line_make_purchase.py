@@ -120,6 +120,8 @@ class ResourcePlanLineMakePurchase(models.TransientModel):
         for resource in linked_resources:
             if resource.state in 'draft':
                 continue
+            if resource.resource_type in 'task':
+                continue
             for resource_line in resource:
                 vals = {
                     'order_id': order_id and order_id.id,
@@ -130,7 +132,7 @@ class ResourcePlanLineMakePurchase(models.TransientModel):
                     'price_unit': resource_line.price_unit,
                     'date_planned': resource_line.date,
                     'account_analytic_id': resource_line.account_id.id,
-                    'resource_id': self
+                    'resource_id': self,
                 }
                 lines.append(vals)
         return lines
