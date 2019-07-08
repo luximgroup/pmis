@@ -72,8 +72,11 @@
                 <field name="child_ids" nolabel="1"/>
               </group>
             </page>
-            <page string="Costs" name="costs">
+            <page string="Planned Costs" name="costs">
               <field name="analytic_line_plan_ids"/>
+            </page>
+            <page name="purchases" string="Purchases">
+              <field name="purchase_order_line_ids" nolabel="1"/>
             </page>
           </notebook>
         </sheet>

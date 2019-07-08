@@ -43,7 +43,6 @@ class ResourcePlanLineMakePurchase(models.TransientModel):
         if crm_id and crm_id.account_id:
             partner = crm_id.partner_id
             purchase_order = self.env['purchase.order']
-            # TODO: check vendor pricelist for purchases field name
             pricelist = partner.property_product_pricelist.id
             partner_address = partner.address_get(
                 [
@@ -132,7 +131,7 @@ class ResourcePlanLineMakePurchase(models.TransientModel):
                     'price_unit': resource_line.price_unit,
                     'date_planned': resource_line.date,
                     'account_analytic_id': resource_line.account_id.id,
-                    'resource_id': self,
+                    'resource_id': self.id,
                 }
                 lines.append(vals)
         return lines

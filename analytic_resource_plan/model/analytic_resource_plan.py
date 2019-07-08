@@ -134,6 +134,11 @@ class AnalyticResourcePlanLine(models.Model):
         string='Assign To',
         ondelete='set null'
     )
+    purchase_order_line_ids = fields.One2many(
+        comodel_name='purchase.order.line',
+        inverse_name='resource_id',
+        string='Purchase Order Line',
+    )
 
     @api.multi
     def copy(self, default=None):

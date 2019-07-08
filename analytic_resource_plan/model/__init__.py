@@ -7,3 +7,4 @@
 from . import analytic_resource_plan
 from . import account_analytic_line_plan
 from . import account_analytic_account
+from . import purchase
