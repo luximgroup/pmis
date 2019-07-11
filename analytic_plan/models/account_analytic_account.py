@@ -44,6 +44,34 @@ class AccountAnalyticAccount(models.Model):
             account.credit_plan = data_credit_plan.get(account.id, 0.0)
             account.balance_plan = account.credit_plan - account.debit_plan
 
+    @api.multi
+    def _compute_debit_credit_balance(self):
+        """
+        Warning, this method overwrites the standard because the hierarchy
+        of analytic account changes
+        """
+        super(
+            AccountAnalyticAccount, self)._compute_debit_credit_balance()
+        analytic_line_obj = self.env['account.analytic.line.plan']
+        # compute only analytic line
+        for account in self.filtered(lambda x: x.child_ids):
+            domain = [('account_id', 'child_of', account.ids)]
+            credit_groups = analytic_line_obj.read_group(
+                domain=domain + [('amount', '>', 0.0)],
+                fields=['account_id', 'amount'],
+                groupby=['account_id']
+            )
+            data_credit_plan = sum(l['amount'] for l in credit_groups)
+            debit_groups = analytic_line_obj.read_group(
+                domain=domain + [('amount', '<', 0.0)],
+                fields=['account_id', 'amount'],
+                groupby=['account_id']
+            )
+            data_debit_plan = sum(l['amount'] for l in debit_groups)
+            account.debit_plan = abs(data_debit_plan)
+            account.credit_plan = data_credit_plan
+            account.balance_plan = account.credit_plan - account.debit_plan
+
     plan_line_ids = fields.One2many(
         'account.analytic.line.plan',
         'account_id',
