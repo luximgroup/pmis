@@ -128,7 +128,7 @@ class DeliverablePlanLineMakeSale(models.TransientModel):
                     'product_uom': deliverable_line.product_uom_id.id,
                     'price_unit': deliverable_line.price_unit,
                     'account_analytic_id': deliverable_line.account_id.id,
-                    'deliverable_id': self
+                    # 'deliverable_id': self
                 }
                 lines.append(vals)
         return lines
